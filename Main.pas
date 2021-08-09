@@ -309,7 +309,6 @@ end;
 
 procedure TMainForm.FileRead(Sender: TObject);
 var
-  CmdList: TStrings;
   PortNum : Integer;
   TF :TextFile;
   S: String;
@@ -326,6 +325,8 @@ end;
 procedure TMainForm.GpIo2moniClick(Sender: TObject);
 var
   TF :TextFile;
+  CmdList: TStrings;
+  PortNum : Integer;
 begin
     if Timer1.Enabled  then
     begin
@@ -336,11 +337,14 @@ begin
     begin
       if not  FileExists('/sys/class/gpio/gpio2/value') then
       begin
-          { GPIO02�̍쐬 }
-          AssignFile(TF, '/sys/class/gpio/export/2');
-          Rewrite(Tf);
-          WriteLn(Tf,'');
-          closefile(TF);
+         CmdList := TStringList.Create;
+         CmdList.add('echo 2  >/sys/class/gpio/export');
+         CmdList.add('echo in >/sys/class/gpio/gpio2/direction');
+
+         if  SuCmdExec(CmdList,
+                                Memo1.lines) <> -1 then
+                                        timer1.Enabled := true;
+         CmdList.Free;
       end;
       timer1.Enabled := true;
     end;
@@ -353,6 +357,12 @@ var
   TF :TextFile;
   S: String;
 begin
+   if not  FileExists('/sys/class/gpio/gpio2/value') then
+   begin
+      timer1.Enabled := false;
+      Gpio2State.text := 'NONE READ';
+      exit;
+   end;
    AssignFile(TF, '/sys/class/gpio/gpio2/value');
    Reset(TF);
    ReadLn(TF,s);
