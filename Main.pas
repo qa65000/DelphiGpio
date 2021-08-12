@@ -324,9 +324,9 @@ end;
 
 procedure TMainForm.GpIo2moniClick(Sender: TObject);
 var
-  TF :TextFile;
+//  TF :TextFile;
   CmdList: TStrings;
-  PortNum : Integer;
+//  PortNum : Integer;
 begin
     if Timer1.Enabled  then
     begin
@@ -352,8 +352,8 @@ end;
 
 procedure TMainForm.Timer1Timer(Sender: TObject);
 var
-  CmdList: TStrings;
-  PortNum : Integer;
+//  CmdList: TStrings;
+//  PortNum : Integer;
   TF :TextFile;
   S: String;
 begin
